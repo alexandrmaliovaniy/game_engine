@@ -1,5 +1,5 @@
 let Vector2 = require('./Vector2');
-let Transform = require('./Transfrom');
+let Transform = require('./Transform');
 class Camera {
     static currentCamera = null;
     /**

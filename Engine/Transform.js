@@ -1,7 +1,7 @@
 let Vector2 = require("./Vector2");
 class Transform {
     /**
-     * Create Transfrom component to manipulate object's position, rotation and scale
+     * Create Transform component to manipulate object's position, rotation and scale
      * @param {Vector2} position - position of the object from coords center
      * @param {Number} rotation - angle in radians. If you work in degrees use Math.RadToDegree(rad)
      * @param {Vector2} scale - x and y scale multiply
