@@ -25,14 +25,24 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-module.exports = {
-    Vector2: Vector2,
-    Window: Window,
-    Transform: Transform,
-    GameObject: GameObject,
-    Rect: Rect,
-    Cirlce: Cirlce,
-    Scene: Scene,
-    Camera: Camera,
-    Electron: Electron,
-}
+global.Vector2 = Vector2;
+global.Window = Window;
+global.Transform = Transform;
+global.GameObject = GameObject;
+global.Rect = Rect;
+global.Cirlce = Cirlce;
+global.Scene = Scene;
+global.Camera = Camera;
+global.Electron = Electron;
+
+// module.exports = {
+//     Vector2: Vector2,
+//     Window: Window,
+//     Transform: Transform,
+//     GameObject: GameObject,
+//     Rect: Rect,
+//     Cirlce: Cirlce,
+//     Scene: Scene,
+//     Camera: Camera,
+//     Electron: Electron,
+// }

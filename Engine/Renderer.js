@@ -1,5 +1,9 @@
 let Scene = require('./Scene');
 let Camera = require("./Camera");
+/**
+ * Clear scene view and execute Draw method in each GameObject in current scene
+ * @param {Object} Window - Game window link 
+ */
 function DrawCall(Window) {
     ClearScene(Window);
     let objs = Scene.currentScene.gameObjects;
@@ -9,11 +13,17 @@ function DrawCall(Window) {
         }
     }
 }
-
+/**
+ * Clear screen
+ * @param {Object} Window - Game window target 
+ */
 function ClearScene(Window) {
     Window.context.clearRect(0, 0, Window.width, Window.height);
 }
-
+/**
+ * Apply rendering logic for each frame
+ * @param {Object} Window - Game window
+ */
 function Update(Window) {
     let start = performance.now();
     requestAnimationFrame(function frame(time) {
