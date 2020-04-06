@@ -1,11 +1,14 @@
 // Require components
 let Vector2 = require("./Vector2");
 let Transform = require('./Transform');
-let {GameObject, Rect, Cirlce} = require("./GameObject");
+let {GameObject, Rect, Circle} = require("./GameObject");
+let Collider = require('./Collider');
+let Trigger = require('./Trigger');
 let Scene = require("./Scene");
 let Camera = require("./Camera");
 let Electron = require('electron');
 let Renderer = require("./Renderer");
+let Math = require("./Math");
 
 
 // Init Game Window
@@ -30,9 +33,11 @@ global.Window = Window;
 global.Transform = Transform;
 global.GameObject = GameObject;
 global.Rect = Rect;
-global.Cirlce = Cirlce;
+global.Circle = Circle;
 global.Scene = Scene;
 global.Camera = Camera;
+global.Collider = Collider;
+global.Trigger = Trigger;
 global.Electron = Electron;
 
 // module.exports = {
