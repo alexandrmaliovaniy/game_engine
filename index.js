@@ -1,7 +1,7 @@
 const {app, BrowserWindow} = require('electron');
 const fs = require('fs');
-const path = require('path');
-const projectPath = "C:/Users/Alexandr/Desktop/PROJECTS/READY/testGame";
+
+const projectPath = process.argv[2];
 
 function CreateWindow() {
     const mainWindow = new BrowserWindow({

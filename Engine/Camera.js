@@ -9,6 +9,10 @@ class Camera {
     constructor(transform = new Transform()) {
         this.enable = false;
         this.transform = transform;
+        if (!Camera.currentCamera) {
+            Camera.currentCamera = this;
+            this.enable = true;
+        }
     }
     /**
      * Enable passed camera and disable last one
