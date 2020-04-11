@@ -1,7 +1,9 @@
 // Require components
 let Vector2 = require("./Vector2");
 let Transform = require('./Transform');
-let {GameObject, Rect, Circle} = require("./GameObject");
+let SpriteLoader = require("./SpriteLoader");
+let Sprite = require("./Sprite");
+let {GameObject, Rect, Circle, Mesh} = require("./GameObject");
 let Collider = require('./Collider');
 let Trigger = require('./Trigger');
 let Scene = require("./Scene");
@@ -24,7 +26,9 @@ Window.context = Window.getContext("2d");
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    Renderer.Update(Window);
+    SpriteLoader.Load(function() {
+        Renderer.Update(Window);
+    });
 });
 
 
@@ -36,8 +40,10 @@ global.Rect = Rect;
 global.Circle = Circle;
 global.Scene = Scene;
 global.Camera = Camera;
+global.Mesh = Mesh;
 global.Collider = Collider;
 global.Trigger = Trigger;
+global.Sprite = Sprite;
 global.Electron = Electron;
 
 // module.exports = {
@@ -48,6 +54,8 @@ global.Electron = Electron;
 //     Rect: Rect,
 //     Cirlce: Cirlce,
 //     Scene: Scene,
+//     Trigger: Trigger,
+//     Collider: Collider,
 //     Camera: Camera,
 //     Electron: Electron,
 // }

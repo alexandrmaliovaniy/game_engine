@@ -1,9 +1,8 @@
-# game_engine
-Game engine node js
+# Node js game engine
 
-#Install
+# Install
 
-##Requirements:
+## Requirements:
     - Node js
 
 1. Clone on github
@@ -14,7 +13,7 @@ Now we have to create project folder, you can have it anywhere but i must consis
 
 Well, you are ready to start coding.
 
-First of all we need to include engine code. This file is in game engine folder, for easier access to engines file we have special variable "____enginePath" and after it you sould write a name of package "Engine", "Vector2" or anythink else which engine folder contains
+First of all we need to include engine code. This file is in game engine folder, for easier access to engines file we have special variable "____enginePath" and after it you sould write a name of package "Engine", "Vector2" or anything else which engine folder contains
 
 
 ```javascript

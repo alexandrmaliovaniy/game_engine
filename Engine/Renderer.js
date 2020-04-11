@@ -30,7 +30,7 @@ function Update(Window) {
         let deltaTime = time - start;
         start = time;
         if (Scene.currentScene) {
-            Scene.currentScene.Update(deltaTime);
+            Scene.currentScene.Update(deltaTime / 1000);
             if (Camera.currentCamera) {
                 DrawCall(Window);
             }

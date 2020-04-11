@@ -59,8 +59,6 @@ class Circle extends GameObject {
         }
     }
     Draw(Window) {
-        console.log(this.renderProps.startAngle, this.renderProps.sector, this.renderProps.anticlockwise);
-        
         Window.context.save();
         Window.context.translate(Window.center.x + this.transform.position.x - Camera.currentCamera.transform.position.x, Window.center.y - (this.transform.position.y - Camera.currentCamera.transform.position.y));
         Window.context.rotate(this.transform.rotation);
@@ -72,11 +70,24 @@ class Circle extends GameObject {
     }
 }
 
-class Mesh {
-
+class Mesh extends GameObject {
+    constructor(transform = new Transform(), sprite, layer) {
+        super(transform, layer);
+        this.sprite = sprite;
+    }
+    Draw(Window) {
+        Window.context.save();
+        Window.context.translate(Window.center.x + this.transform.position.x - Camera.currentCamera.transform.position.x, Window.center.y - (this.transform.position.y - Camera.currentCamera.transform.position.y));
+        Window.context.rotate(this.transform.rotation);
+        let width = this.sprite.width * this.transform.scale.x;
+        let height = this.sprite.height * this.transform.scale.y;
+        Window.context.drawImage(this.sprite, -width/2, -height/2, width, height);
+        Window.context.restore();
+    }
 }
 module.exports = {
     GameObject: GameObject,
     Rect: Rect,
+    Mesh: Mesh,
     Circle: Circle
 }
