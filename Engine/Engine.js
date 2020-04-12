@@ -11,7 +11,7 @@ let Camera = require("./Camera");
 let Electron = require('electron');
 let Renderer = require("./Renderer");
 let Math = require("./Math");
-
+let Input = require("./Input");
 
 // Init Game Window
 let Window = document.getElementById("window");
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 global.Vector2 = Vector2;
+global.Input = Input;
 global.Window = Window;
 global.Transform = Transform;
 global.GameObject = GameObject;
