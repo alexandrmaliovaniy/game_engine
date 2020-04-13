@@ -3,7 +3,8 @@ let transform = require("./Transform");
 let Collider = require("./Collider");
 let Scene = require('./Scene');
 let Camera = require("./Camera");
-let Material = require("./Material")
+let Material = require("./Material");
+let Coroutine = require('./Coroutine');
 
 class GameObject {
     /**
@@ -74,6 +75,8 @@ class Mesh extends GameObject {
     constructor(transform = new Transform(), sprite, layer) {
         super(transform, layer);
         this.sprite = sprite;
+        this.defaultSprite = sprite;
+        this.animations = {};
     }
     Draw(Window) {
         Window.context.save();
@@ -81,8 +84,37 @@ class Mesh extends GameObject {
         Window.context.rotate(this.transform.rotation);
         let width = this.sprite.width * this.transform.scale.x;
         let height = this.sprite.height * this.transform.scale.y;
-        Window.context.drawImage(this.sprite, -width/2, -height/2, width, height);
+        if (this.sprite instanceof Animation) {
+            Window.context.drawImage(this.sprite, this.sprite.offset.x * this.sprite.frameWidth, this.sprite.offset.y * this.sprite.frameHeight, this.sprite.frameWidth, this.sprite.frameHeight, -this.sprite.frameWidth/2,  -this.sprite.frameHeight/2, this.sprite.frameWidth, this.sprite.frameHeight);
+        } else {
+            Window.context.drawImage(this.sprite, -width/2, -height/2, width, height);
+        }
         Window.context.restore();
+    }
+    addAnimation(anim) {
+        if (typeof anim === "string") {
+
+        } else if (anim instanceof Animation) {
+            console.log(anim.name);
+            
+            this.animations[anim.name] = anim;
+        }
+    }
+    playAnimation(name = "", speed = 100, loop = false) {        
+        this.sprite = this.animations[name];
+        let that = this;
+        function* anim() {            
+            for (let y = 0; y < that.sprite.height / that.sprite.frameHeight; y++) {
+                for (let x = 0; x < that.sprite.width / that.sprite.frameWidth; x++) {
+                    that.sprite.offset = new Vector2(x, y);                    
+                    yield new Coroutine.WaitForSeconds(speed);
+                }
+            }
+            if (loop) {
+                Coroutine.StartCoroutine(anim());
+            }
+        }
+        Coroutine.StartCoroutine(anim());
     }
 }
 module.exports = {
