@@ -22,6 +22,12 @@ class GameObject {
             Scene.currentScene.gameObjects.push(this);
         }
     }
+    Disable() {
+        this.enable = false;
+    }
+    Enable() {
+        this.enable = true;
+    }
 }
 
 class Line {
@@ -95,8 +101,6 @@ class Mesh extends GameObject {
         if (typeof anim === "string") {
 
         } else if (anim instanceof Animation) {
-            console.log(anim.name);
-            
             this.animations[anim.name] = anim;
         }
     }
@@ -117,9 +121,48 @@ class Mesh extends GameObject {
         Coroutine.StartCoroutine(anim());
     }
 }
+class ParticleSystem extends GameObject {
+    constructor(transform = new Transform(), config = {}, layer = 0) {
+        super(transform, layer);
+        this.config = config;
+        this.direction = this.GetDirection(this.config.count);
+        this.start = performance.now();
+    }
+    GetVelocity(deltaTime) {
+        return (this.config.velocity + deltaTime * this.config.acceleration) * deltaTime;
+    }
+    GetDirection(objCount) {
+        let res = [];
+        for (let i = 0; i < objCount; i++) {
+            let rand = Math.random();
+            res[i] = new Vector2(Math.cos(rand * 2 * Math.PI), Math.sin(rand * 2 * Math.PI));
+        }
+        return res;
+    }
+    Draw() {
+        Window.context.save();
+        Window.context.translate(Window.center.x + this.transform.position.x - Camera.currentCamera.transform.position.x, Window.center.y - (this.transform.position.y - Camera.currentCamera.transform.position.y));
+        Window.context.rotate(this.transform.rotation);
+        let width = this.config.sprite.width * this.transform.scale.x;
+        let height = this.config.sprite.height * this.transform.scale.y;
+        let delta = (performance.now() - this.start) / 1000;
+        if (delta > this.config.lifeTime) {
+            return;
+        }
+        for(let i = 0; i < this.config.count; i++) {
+            let distance = this.direction[i].multiply(this.GetVelocity(delta));
+            console.log(distance.x, distance.y);
+            
+            Window.context.drawImage(this.config.sprite, distance.x, distance.y, this.config.width, this.config.height);
+        }
+        Window.context.restore();
+
+    }
+}
 module.exports = {
     GameObject: GameObject,
     Rect: Rect,
     Mesh: Mesh,
+    ParticleSystem: ParticleSystem,
     Circle: Circle
 }
