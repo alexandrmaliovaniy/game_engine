@@ -1,5 +1,5 @@
 let Vector2 = require("./Vector2");
-let transform = require("./Transform");
+let Transform = require("./Transform");
 let Collider = require("./Collider");
 let Scene = require('./Scene');
 let Camera = require("./Camera");
@@ -12,7 +12,7 @@ class GameObject {
      * @param {Transform} transform - GameObject's transform
      * @param {Number} layer - id of sorting layer
      */
-    constructor(transform = new transform(), layer = 0) {
+    constructor(transform = new Transform(), layer = 0) {
         this.enable = true;
         this.transform = transform;
         this.collider = null;
@@ -20,6 +20,11 @@ class GameObject {
         this.layer = layer;
         if (Scene.currentScene) {
             Scene.currentScene.gameObjects.push(this);
+        }
+    }
+    Set(obj) {
+        for (let index in obj) {
+            this[index] = obj[index];
         }
     }
     Disable() {
@@ -35,12 +40,12 @@ class Line {
 }
 
 class Rect extends GameObject {
-    constructor(transform = new transform(), width = 0, height = 0, layer = 0) {
+    constructor(transform = new Transform(), width = 0, height = 0, layer = 0) {
         super(transform, layer);
         this.width = width;
         this.height = height;
         this.material = new Material();
-        this.collider = new Collider.Rect(new Transform(), this.width / 2, this.height / 2);
+        this.collider = new Collider.Rect(new Transform(), this.width, this.height);
     }
     Draw(Window) {
         Window.context.save();
@@ -81,46 +86,24 @@ class Mesh extends GameObject {
     constructor(transform = new Transform(), sprite, layer) {
         super(transform, layer);
         this.sprite = sprite;
+        this.collider = new Collider.Rect(new Transform(), this.sprite.width, this.sprite.height);
         this.defaultSprite = sprite;
-        this.animations = {};
     }
     Draw(Window) {
-        Window.context.save();
+        Window.context.save();  
         Window.context.translate(Window.center.x + this.transform.position.x - Camera.currentCamera.transform.position.x, Window.center.y - (this.transform.position.y - Camera.currentCamera.transform.position.y));
         Window.context.rotate(this.transform.rotation);
-        let width = this.sprite.width * this.transform.scale.x;
-        let height = this.sprite.height * this.transform.scale.y;
-        if (this.sprite instanceof Animation) {
-            Window.context.drawImage(this.sprite, this.sprite.offset.x * this.sprite.frameWidth, this.sprite.offset.y * this.sprite.frameHeight, this.sprite.frameWidth, this.sprite.frameHeight, -this.sprite.frameWidth/2,  -this.sprite.frameHeight/2, this.sprite.frameWidth, this.sprite.frameHeight);
-        } else {
-            Window.context.drawImage(this.sprite, -width/2, -height/2, width, height);
-        }
+        Window.context.drawImage(this.sprite, this.sprite.offset.x * this.sprite.frameWidth * this.transform.scale.x, this.sprite.offset.y * this.sprite.frameHeight * this.transform.scale.y, this.sprite.frameWidth * this.transform.scale.x, this.sprite.frameHeight * this.transform.scale.y, -(this.sprite.frameWidth * this.transform.scale.x)/2,  -(this.sprite.frameHeight * this.transform.scale.y)/2, this.sprite.frameWidth * this.transform.scale.x, this.sprite.frameHeight * this.transform.scale.y);
         Window.context.restore();
     }
-    addAnimation(anim) {
-        if (typeof anim === "string") {
-
-        } else if (anim instanceof Animation) {
-            this.animations[anim.name] = anim;
-        }
-    }
-    playAnimation(name = "", speed = 100, loop = false) {        
-        this.sprite = this.animations[name];
-        let that = this;
-        function* anim() {            
-            for (let y = 0; y < that.sprite.height / that.sprite.frameHeight; y++) {
-                for (let x = 0; x < that.sprite.width / that.sprite.frameWidth; x++) {
-                    that.sprite.offset = new Vector2(x, y);                    
-                    yield new Coroutine.WaitForSeconds(speed);
-                }
-            }
-            if (loop) {
-                Coroutine.StartCoroutine(anim());
-            }
-        }
-        Coroutine.StartCoroutine(anim());
+    // EXPEREMENTAL
+    OverlapseRect(rect = new GameObject()) {
+        if (this.transform.position.x + this.collider.transform.position.x + this.collider.width / 2 < rect.transform.position.x + rect.collider.transform.position.x - rect.collider.width / 2 || this.transform.position.x + this.collider.transform.position.x - this.collider.width/2 > rect.transform.position.x + rect.collider.transform.position.x + rect.collider.width/2) return false;
+        if (this.transform.position.y + this.collider.transform.position.y + this.collider.height / 2 < rect.transform.position.y + rect.collider.transform.position.y - rect.collider.height / 2 || this.transform.position.y + this.collider.transform.position.y - this.collider.height/2 > rect.transform.position.y + rect.collider.transform.position.y + rect.collider.height/2) return false;
+        return true;
     }
 }
+// EXPEREMENTAL
 class ParticleSystem extends GameObject {
     constructor(transform = new Transform(), config = {}, layer = 0) {
         super(transform, layer);
@@ -146,15 +129,13 @@ class ParticleSystem extends GameObject {
         let width = this.config.sprite.width * this.transform.scale.x;
         let height = this.config.sprite.height * this.transform.scale.y;
         let delta = (performance.now() - this.start) / 1000;
-        if (delta > this.config.lifeTime) {
-            return;
-        }
+        Window.context.globalAlpha = 1 - delta / this.config.lifeTime;
         for(let i = 0; i < this.config.count; i++) {
             let distance = this.direction[i].multiply(this.GetVelocity(delta));
-            console.log(distance.x, distance.y);
             
             Window.context.drawImage(this.config.sprite, distance.x, distance.y, this.config.width, this.config.height);
         }
+        Window.context.globalAlpha = 1;
         Window.context.restore();
 
     }

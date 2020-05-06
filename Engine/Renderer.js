@@ -1,5 +1,6 @@
 let Scene = require('./Scene');
 let Camera = require("./Camera");
+let {Rect} = require("./GameObject");
 /**
  * Clear scene view and execute Draw method in each GameObject in current scene
  * @param {Object} Window - Game window link 
@@ -7,8 +8,10 @@ let Camera = require("./Camera");
 function DrawCall(Window) {
     ClearScene(Window);
     let objs = Scene.currentScene.gameObjects;
+    let view = new Rect(Camera.currentCamera.transform, Window.width, Window.height);
+    view.Disable();
     for (let i = 0; i < objs.length; i++) {
-        if (objs[i].enable) {
+        if (objs[i].enable && objs[i].OverlapseRect(view)) {
             objs[i].Draw(Window);
         }
     }
@@ -31,7 +34,7 @@ function Update(Window) {
         start = time;
         if (Scene.currentScene) {
             Scene.currentScene.Update(deltaTime / 1000);
-            if (Camera.currentCamera) {
+            if (Camera.currentCamera) {                
                 DrawCall(Window);
             }
         }

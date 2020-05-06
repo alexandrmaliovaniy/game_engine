@@ -1,18 +1,18 @@
 // Require components
-let Vector2 = require("./Vector2");
-let Transform = require('./Transform');
-let SpriteLoader = require("./SpriteLoader");
-let Sprite = require("./Sprite");
-let {GameObject, Rect, Circle, Mesh, ParticleSystem} = require("./GameObject");
-let Collider = require('./Collider');
-let Trigger = require('./Trigger');
-let Scene = require("./Scene");
-let Camera = require("./Camera");
-let Electron = require('electron');
-let Renderer = require("./Renderer");
-let Math = require("./Math");
-let Animation = require('./Animation');
-let Input = require("./Input");
+const Vector2 = require("./Vector2");
+const Transform = require('./Transform');
+const SpriteLoader = require("./SpriteLoader");
+const Sprite = require("./Sprite");
+const {GameObject, Rect, Circle, Mesh, ParticleSystem} = require("./GameObject");
+const Collider = require('./Collider');
+const Trigger = require('./Trigger');
+const Scene = require("./Scene");
+const Camera = require("./Camera");
+const Electron = require('electron');
+const Renderer = require("./Renderer");
+const Math = require("./Math");
+const Animation = require('./Animation');
+const Input = require("./Input");
 
 // Init Game Window
 let Window = document.getElementById("window");
