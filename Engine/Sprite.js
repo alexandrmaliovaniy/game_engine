@@ -1,5 +1,10 @@
 let SpriteLoader = require("./SpriteLoader");
 class Sprite extends Image {
+    /**
+     * 
+     * @param {String} name - name of sprite, it sould be unic
+     * @param {String} src - file path
+     */
     constructor(name = "", src = "") {
         if (!SpriteLoader.handler[name]) {
             super();

@@ -1,5 +1,5 @@
 // Require components
-const Vector2 = require("./Vector2");
+const {Vector2, LinkedList} = require("./Generics");
 const Transform = require('./Transform');
 const SpriteLoader = require("./SpriteLoader");
 const Sprite = require("./Sprite");
@@ -24,6 +24,7 @@ Window.height = windowSize[1];
 Window.center = new Vector2(Window.width / 2, Window.height / 2);
 Window.fov = (Window.width * Window.width + Window.height * Window.height) / 2;
 Window.context = Window.getContext("2d");
+Window.context.imageSmoothingEnabled = false;
 
 
 document.addEventListener("DOMContentLoaded", function() {

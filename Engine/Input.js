@@ -48,6 +48,10 @@ class Input {
         Alt: 18,
         Shift: 16,
     }
+    /**
+     * Return key state
+     * @param {Input.KeyCode} keycode 
+     */
     static GetKeyDown(keycode) {
         if (Input.activeKeys[keycode]) {
             return true;
